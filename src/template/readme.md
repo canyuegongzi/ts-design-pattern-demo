@@ -1,92 +1,92 @@
-### 模板方法模式
-#### 专业描述
+## 模板方法模式
+### 专业描述
 模板方法模式（Template Pattern）中，一个抽象类公开定义了执行它的方法的方式/模板。它的子类可以按需要重写方法实现，但调用将以抽象类中定义的方式进行。这种类型的设计模式属于行为型模式。
-#### 普通描述（个人理解）
-将不同的处理策略分开，抽离成独立的类， 避免出现过于复杂的if else。
-### UML
-![Proxy-UML.png](./strategy_pattern_uml.jpg "my-logo")
+#### 普通描述
+模板方法模式由抽象父类和具体实现的子类构成。抽象父类中封装了子类的算法框架，子类通过继承这个抽象类，也继承了整个算法结构，并且可以选择重写父类的方法
+## UML(来源网络)
+![Proxy-UML.png](./template_pattern_uml_diagram.jpg "my-logo")
 
-### 经典场景
-1. 表单验证
-2. 系统登录根据不同角色显示不同功能
-### 优缺点
-#### 优点
-1. 可以有效的避免多重条件选择语句。
-2. 策略算法可以自由切换。
-2. 扩展性良好。
-#### 缺点
-1. 策略类会增多。
-2. 所有策略类都需要对外暴露
-### 代码实现
-案例以超市购物结算按会员等级打折为例
-1. 普通：无优惠
-2. 会员： 9折
-3. 超级会会员： 8折
+## 经典场景
+前端领域暂未找到合理的案例
+1. 代码重构时可以将公共代码抽离成独立的父类。
+## 优缺点
+### 优点
+1. 父类统一了基本的结构和算法。
+2. 能够最大限度的实现代码的复用。
+2. 子类可以在父类的基础上进行扩展。
+### 缺点
+1. 增加了代码的复杂程度（增加了的抽象类和类间联系）。
+## 代码实现
+前端领域暂时未找到适合的案例。
+以下案例来演网络（（来源JAVA案例））
+
+我们将创建一个定义操作的 Game 抽象类，其中，模板方法设置为 final，这样它就不会被重写。Cricket 和 Football 是扩展了 Game 的实体类，它们重写了抽象类的方法。
 ```
-interface SettlementStrategy {
-    settlementMoney(number: number) : number;
-}
-// 会员 结算
-export class memberSettlementMoney implements SettlementStrategy{
-    settlementMoney(num: number) {
-        return num * 0.9;
+// 定义抽象类（规定基本的方法和执行顺序）
+abstract class Game {
+    abstract initialize();
+    abstract startPlay();
+    abstract endPlay();
+    // 模板
+    play(){
+        this.initialize();
+        this.startPlay();
+        this.endPlay();
     }
 }
-// 超级会员 结算
-export class svipSettlementMoney implements SettlementStrategy{
-    settlementMoney(num: number) {
-        return num * 0.8;
+// 子类按照抽象类的规定实现方法
+class Cricket extends Game {
+
+    endPlay() {
+        console.log("Cricket Game Finished!");
     }
-}
-// 普通结算
-export class normalSettlementMoney implements SettlementStrategy{
-    settlementMoney(num: number) {
-        return num ;
+
+    initialize() {
+        console.log("Cricket Game Initialized! Start playing.");
     }
-}
-export class Context {
-    private strategy: SettlementStrategy;
-    constructor(strategy: SettlementStrategy){
-        this.strategy = strategy;
-    }
-    getMoney(num1: number): number{
-        return this.strategy.settlementMoney(num1);
+
+    startPlay() {
+        console.log("Cricket Game Started. Enjoy the game!");
     }
 }
 
-```
-### 代码测试
-#### 测试用例
-```
-test('memberSettlementMoney', (t => {
-    // 会员
-    let context = new Context(new memberSettlementMoney());
-    t.is(context.getMoney(125.36), 112.824);
-}));
 
-test('svipSettlementMoney', (t => {
-    // 超级会员
-    const context = new Context(new svipSettlementMoney());
-    t.is(context.getMoney(2145.32), 1716.256);
-}));
+class Football extends Game {
 
-test('normalSettlementMoney', (t => {
-    // 默认价格
-    const context = new Context(new normalSettlementMoney());
-    t.is(context.getMoney(899), 899);
-}));
+    endPlay() {
+        console.log("Football Game Finished!");
+    }
 
+    initialize() {
+        console.log("Football Game Initialized! Start playing.");
+    }
+
+    startPlay() {
+        console.log("Football Game Started. Enjoy the game!");
+    }
+}
 
 ```
-#### 测试结果
+## 代码测试
+### 测试用例
 ```
-> tsc test/Strategy.test.ts && ava -v test/Strategy.test.js
+let game = new Cricket();
+game.play();
+console.log("========\n");
+game = new Football();
+game.play();
 
-  √ memberSettlementMoney
-  √ svipSettlementMoney
-  √ normalSettlementMoney
-  ─
-  3 tests passed
+```
+### 测试结果
+```
+Cricket Game Initialized! Start playing.
+Cricket Game Started. Enjoy the game!
+Cricket Game Finished!
+========
+
+Football Game Initialized! Start playing.
+Football Game Started. Enjoy the game!
+Football Game Finished!
 
 Process finished with exit code 0
 ```

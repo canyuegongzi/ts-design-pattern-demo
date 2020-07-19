@@ -23,7 +23,9 @@
     "test:proxy": "tsc test/Proxy.test.ts && ava -v test/Proxy.test.js",
     "test:Template": "tsc test/Template.test.ts && ava -v test/Template.test.js",
     "test:ChainResponsibility": "tsc test/ChainResponsibility.test.ts && ava -v test/ChainResponsibility.test.js",
-    "test:Strategy": "tsc test/Strategy.test.ts && ava -v test/Strategy.test.js"
+    "test:Strategy": "tsc test/Strategy.test.ts && ava -v test/Strategy.test.js",
+    "test:Decorator": "tsc  test/Decorator.test.ts --target ES5 --experimentalDecorators && ava -v test/Decorator.test.js",
+    "test:Adapter": "tsc  test/Adapter.test.ts --target ES5 --experimentalDecorators && ava -v test/Adapter.test.js"
 
 
   },
